@@ -12,7 +12,7 @@ win.getMouse()
 win.close()
 
 """
-def probmatrix(n, p):
+def probmatrix(n, p):   #meathod for calculating the initial matrix
     one = 1-p
     z = p
     total = n*n
@@ -29,7 +29,38 @@ def probmatrix(n, p):
     np.random.shuffle(arr)
     return arr
 n = 4
+
+
+def changesourcedest(arr , n): #this meathod is to fix the source and the destination block problem. I am basically changing the
+    if(val[0][0] == 0): #the values of the source and the destination if they are blocked. I am keeping the probability same by swiching some other value to 0.
+        for i in range(0,n):
+            a = 0
+            for j in range(1,n):
+                if(val[i][j] == 1 and (i!=n-1 or j != n-1) ):
+                    val[i][j] =0; #if the values encountered is one then switch it to zero to keep the probability same.
+                    val[0][0]= 1;  # switch the source to one.
+                    a = 1
+                    break;
+            if(a == 1):
+                break;
+    if(val[n-1][n-1] == 0):  #this is for the destination value. you are doing the same thing again.
+        for i in range(0,n):
+            a = 0
+            for j in range(1,n):
+                if(val[i][j] == 1):
+                    val[i][j] =0;
+                    val[n-1][n-1]= 1;
+                    a = 1
+                    break;
+            if(a == 1):
+                break;
+    return arr
+
 val = np.array(probmatrix(n,0.4)).reshape((n,n))
+print(val[3][3])
+print(val)
+if( val[0][0] == 0 or val[n-1][n-1] == 0):
+    val = changesourcedest(val, n)
 def buildmaze(n):
     win = GraphWin("My maze" , n*40 ,n*40)
     arr = []
@@ -64,16 +95,3 @@ for i in range(0,n):
 #m = np.array((10,10))
 w.getMouse()
 w.close()
-
-
-"""
-def arraygeneration(n):
-    a = []
-    for i in range(0,n):
-        for j in range(0,n):
-            a.append(rand(0,1))
-    return a
-
-a = arraygeneration(4)
-a = np.array((4,4))
-"""
