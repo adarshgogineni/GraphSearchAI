@@ -103,5 +103,12 @@ valt = [ [1 , 0, 1 , 1] ,
 value = bfs.bfs(val,n)
 if( value == None):
     print( "no path to be found")
+else:
+    while( value.prvnode != None):
+        print(str(value.prvnode.nodex) + " " + str(value.prvnode.nodey) )
+        arr[value.prvnode.nodex][value.prvnode.nodey].setFill("red")
+        value = value.prvnode
+if(value !=None):
+    arr[n-1][n-1].setFill("red")
 w.getMouse()
 w.close()
