@@ -58,7 +58,7 @@ def changesourcedest(arr , n): #this meathod is to fix the source and the destin
 
 val = np.array(probmatrix(n,0.4)).reshape((n,n))
 print(val[3][3])
-print(val)
+
 if( val[0][0] == 0 or val[n-1][n-1] == 0):
     val = changesourcedest(val, n)
 def buildmaze(n):
@@ -93,8 +93,15 @@ for i in range(0,n):
         else:
             arr[i][j].draw(w)
 #m = np.array((10,10))
-arr = bfs.bfs(arr,n)
-if( arr == None):
+print(val)
+
+valt = [ [1 , 0, 1 , 1] ,
+        [1, 1 , 1, 0 ],
+        [ 0, 1, 1, 1],
+        [0,0,0,1]]
+#print(valt)
+value = bfs.bfs(val,n)
+if( value == None):
     print( "no path to be found")
 w.getMouse()
 w.close()
