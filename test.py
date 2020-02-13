@@ -1,7 +1,7 @@
 from graphics import *
 import numpy as np
 import math
-
+import bfs
 """
 win = GraphWin("My maze", 500, 500)
 shape = Rectangle(Point(80,0), Point(120,40) )
@@ -93,5 +93,8 @@ for i in range(0,n):
         else:
             arr[i][j].draw(w)
 #m = np.array((10,10))
+arr = bfs.bfs(arr,n)
+if( arr == None):
+    print( "no path to be found")
 w.getMouse()
 w.close()
