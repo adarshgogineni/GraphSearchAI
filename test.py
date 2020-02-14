@@ -28,7 +28,7 @@ def probmatrix(n, p):   #meathod for calculating the initial matrix
 
     np.random.shuffle(arr)
     return arr
-n = 4
+n =70
 
 
 def changesourcedest(arr , n): #this meathod is to fix the source and the destination block problem. I am basically changing the
@@ -55,28 +55,28 @@ def changesourcedest(arr , n): #this meathod is to fix the source and the destin
             if(a == 1):
                 break;
     return arr
-
-val = np.array(probmatrix(n,0.4)).reshape((n,n))
+h = 10
+val = np.array(probmatrix(n,0.2)).reshape((n,n))
 print(val[3][3])
 
 if( val[0][0] == 0 or val[n-1][n-1] == 0):
     val = changesourcedest(val, n)
 def buildmaze(n):
-    win = GraphWin("My maze" , n*40 ,n*40)
+    win = GraphWin("My maze" , n*h ,n*h)
     arr = []
     l = 0
-    k = 40
+    k = h
     for i in range(0,n):
         for j in range(0,n):
-            shape = Rectangle(Point(l, i*40), Point(k,40*(i+1)))
+            shape = Rectangle(Point(l, i*h), Point(k,h*(i+1)))
             #print(l)
             shape.setOutline("blue")
             shape.setFill("white")
             arr.append(shape)
-            l = l+40
-            k = k+40
+            l = l+h
+            k = k+h
         l=0
-        k =40
+        k =h
     return win, arr
 
 w , arr = buildmaze(n)
@@ -94,11 +94,6 @@ for i in range(0,n):
             arr[i][j].draw(w)
 #m = np.array((10,10))
 print(val)
-
-valt = [ [1 , 0, 1 , 1] ,
-        [1, 1 , 1, 0 ],
-        [ 0, 1, 1, 1],
-        [0,0,0,1]]
 #print(valt)
 value = bfs.bfs(val,n)
 if( value == None):
