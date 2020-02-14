@@ -2,6 +2,7 @@ from graphics import *
 import numpy as np
 import math
 import bfs
+import BidBFS
 """
 win = GraphWin("My maze", 500, 500)
 shape = Rectangle(Point(80,0), Point(120,40) )
@@ -28,7 +29,7 @@ def probmatrix(n, p):   #meathod for calculating the initial matrix
 
     np.random.shuffle(arr)
     return arr
-n =70
+n =60
 
 
 def changesourcedest(arr , n): #this meathod is to fix the source and the destination block problem. I am basically changing the
@@ -56,7 +57,7 @@ def changesourcedest(arr , n): #this meathod is to fix the source and the destin
                 break;
     return arr
 h = 10
-val = np.array(probmatrix(n,0.2)).reshape((n,n))
+val = np.array(probmatrix(n,0.3)).reshape((n,n))
 print(val[3][3])
 
 if( val[0][0] == 0 or val[n-1][n-1] == 0):
@@ -95,7 +96,21 @@ for i in range(0,n):
 #m = np.array((10,10))
 print(val)
 #print(valt)
-value = bfs.bfs(val,n)
+#value = bfs.bfs(val,n)
+value1, value2 = BidBFS.bidbfs(val, n)
+print(value1,value2)
+if(value1 != 0 and value2 !=0):
+    while( value1 != None):
+        print(str(value1.nodex) + " " + str(value1.nodey) )
+        arr[value1.nodex][value1.nodey].setFill("red")
+        value1 = value1.prvnode
+    while( value2 != None):
+        print(str(value2.nodex) + " " + str(value2.nodey) )
+        arr[value2.nodex][value2.nodey].setFill("red")
+        value2 = value2.prvnode
+w.getMouse()
+w.close()
+"""
 if( value == None):
     print( "no path to be found")
 else:
@@ -105,5 +120,5 @@ else:
         value = value.prvnode
 if(value !=None):
     arr[n-1][n-1].setFill("red")
-w.getMouse()
-w.close()
+
+"""
