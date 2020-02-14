@@ -3,6 +3,7 @@ import numpy as np
 import math
 import bfs
 import BidBFS
+import Astar
 """
 win = GraphWin("My maze", 500, 500)
 shape = Rectangle(Point(80,0), Point(120,40) )
@@ -29,7 +30,7 @@ def probmatrix(n, p):   #meathod for calculating the initial matrix
 
     np.random.shuffle(arr)
     return arr
-n =60
+n =4
 
 
 def changesourcedest(arr , n): #this meathod is to fix the source and the destination block problem. I am basically changing the
@@ -97,6 +98,7 @@ for i in range(0,n):
 print(val)
 #print(valt)
 #value = bfs.bfs(val,n)
+""" #this is for bidirectional BFS
 value1, value2 = BidBFS.bidbfs(val, n)
 print(value1,value2)
 if(value1 != 0 and value2 !=0):
@@ -108,9 +110,9 @@ if(value1 != 0 and value2 !=0):
         print(str(value2.nodex) + " " + str(value2.nodey) )
         arr[value2.nodex][value2.nodey].setFill("red")
         value2 = value2.prvnode
-w.getMouse()
-w.close()
 """
+
+""" #this is for regular bfs
 if( value == None):
     print( "no path to be found")
 else:
@@ -122,3 +124,19 @@ if(value !=None):
     arr[n-1][n-1].setFill("red")
 
 """
+w.getMouse()
+w.close()
+valt = [[1,1,1,0],[1, 1 ,0,0],[1, 0, 1, 1],[1,1,1,1]]
+print(valt)
+value = Astar.astarED(valt,n)
+if( value == None):
+    print( "no path to be found")
+else:
+    while( value.prvnode != None):
+        #print(str(value.prvnode.nodex) + " " + str(value.prvnode.nodey) )
+        arr[value.prvnode.nodex][value.prvnode.nodey].setFill("red")
+        value = value.prvnode
+if(value !=None):
+    arr[n-1][n-1].setFill("red")
+
+print(value)
