@@ -1,7 +1,7 @@
 import bfs
 import math
 import queue
-def EDhuristic(node, n):
+def EDhuristic(node, n): #this is the Euclidean Distance
     x = node.nodex
     y = node.nodey
     xp = x-(n-1)
@@ -9,6 +9,16 @@ def EDhuristic(node, n):
     xp = xp*xp
     yp = yp*yp
     return math.sqrt(xp+yp)
+
+def EDhuristic2(node, n): #this is the Manhattan Distance
+    x = node.nodex
+    y = node.nodey
+    xp = x-(n-1)
+    yp = y - (n-1)
+    #xp = xp*xp
+    #yp = yp*yp
+
+    return abs(xp) + abs(yp)
 def getneighbor(arr, node , n):
     x = node.nodex
     y = node.nodey
@@ -61,7 +71,7 @@ def astarED(arr , n):
         #print( str(minnode.nodex) + " " + str(minnode.nodey))
         minher = -1
         for q in nbr.queue:
-            tmphr = EDhuristic(q, n)
+            tmphr = EDhuristic2(q, n) #Change needed for distances
 
             if ( minher == -1):
                 if(bfs.vt(visited,q.nodex, q.nodey) == False):
