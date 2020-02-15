@@ -72,6 +72,7 @@ def astarED(arr , n):
                     #print(minher)
                     minher = tmphr
                     minnode = q
+                    qu.append((q,tmphr))
             else:
                 if(bfs.vt(visited,q.nodex, q.nodey) == False):
                     if(checkin(qu, q)== False):
@@ -82,6 +83,7 @@ def astarED(arr , n):
             if(len(qu) == 0):
                 return None
             else:
+                rnode = 0
                 sm= n*n
                 for i in range(0,len(qu)):
                     t = qu[i]
@@ -91,11 +93,18 @@ def astarED(arr , n):
                         if(bfs.vt(visited,t[0].nodex, t[0].nodey) == False ):
                             minnode = t[0]
                             sm = t[1]
+                            rnode = t
+                if(rnode != 0):
+                    qu.remove(rnode)
+
         print( str(minnode.nodex) + " " + str(minnode.nodey))
         #print(str(minnode.nodex) + " " + str(minnode.nodey))
         print("nbr")
-
-        visited.put(minnode)
+        #print(qu)
+        if( bfs.vt(visited,minnode.nodex, minnode.nodey) == False):
+            visited.put(minnode)
+        else:
+            return None
         nbr = getneighbor(arr, minnode , n)
         for q_item in nbr.queue:
             print (str(q_item.nodex) + " " + str( q_item.nodey))

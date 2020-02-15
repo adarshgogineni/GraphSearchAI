@@ -30,7 +30,7 @@ def probmatrix(n, p):   #meathod for calculating the initial matrix
 
     np.random.shuffle(arr)
     return arr
-n =4
+n =40
 
 
 def changesourcedest(arr , n): #this meathod is to fix the source and the destination block problem. I am basically changing the
@@ -58,7 +58,7 @@ def changesourcedest(arr , n): #this meathod is to fix the source and the destin
                 break;
     return arr
 h = 10
-val = np.array(probmatrix(n,0.3)).reshape((n,n))
+val = np.array(probmatrix(n,0.2)).reshape((n,n))
 print(val[3][3])
 
 if( val[0][0] == 0 or val[n-1][n-1] == 0):
@@ -124,11 +124,10 @@ if(value !=None):
     arr[n-1][n-1].setFill("red")
 
 """
-w.getMouse()
-w.close()
-valt = [[1,1,1,0],[1, 1 ,0,0],[1, 0, 1, 1],[1,1,1,1]]
-print(valt)
-value = Astar.astarED(valt,n)
+
+#valt = [[1,0,0,1],[1, 1 ,1,1],[1, 1, 1, 0],[1,1,0,1]]
+#print(valt)
+value = Astar.astarED(val,n)
 if( value == None):
     print( "no path to be found")
 else:
@@ -140,3 +139,5 @@ if(value !=None):
     arr[n-1][n-1].setFill("red")
 
 print(value)
+w.getMouse()
+w.close()
