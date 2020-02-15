@@ -1,19 +1,6 @@
 from graphics import *
 import numpy as np
 import math
-import dfs
-"""
-win = GraphWin("My maze", 500, 500)
-shape = Rectangle(Point(80,0), Point(120,40) )
-shape.setOutline("red")
-shape.setFill("red")
-shape.draw(win)
-win.getMouse()
-win.close()
-"""
-
-
-
 
 def probmatrix(n, p):   #meathod for calculating the initial matrix
     one = 1-p
@@ -24,15 +11,15 @@ def probmatrix(n, p):   #meathod for calculating the initial matrix
     one = int(math.ceil(total * one))
     arr = []
     #print(z)
-    for i in range(0,z):
+    for i in range(0,z-1):
         arr.append(0)
+    arr.append(2)
     for i in range(0,one):
         arr.append(1)
 
     np.random.shuffle(arr)
     return arr
 n = 8
-
 
 def changesourcedest(arr , n): #this meathod is to fix the source and the destination block problem. I am basically changing the
     if(val[0][0] == 0): #the values of the source and the destination if they are blocked. I am keeping the probability same by swiching some other value to 0.
@@ -88,20 +75,13 @@ arr = np.array(arr)
 arr = arr.reshape((n,n))
 print( arr.shape)
 for i in range(0,n):
-    for j in range( 0 , n):
+    for j in range(0 , n):
         #print(arr[i][j])
         if( val[i][j] == 0):
             arr[i][j].setFill("black")
             arr[i][j].draw(w)
+        elif( val[i][j] == 2):
+            arr[i][j].setFill("red")
+            arr[i][j].draw(w)
         else:
             arr[i][j].draw(w)
-#m = np.array((10,10))
-#val is the array
-#arr is the Graphics
-#n is the size
-start = dfs.node(0,0)
-dfs.dfs(start,val,n)
-for visited in dfs.visited:
-    arr[visited[0]][visited[1]].setFill("green")
-w.getMouse()
-w.close()
