@@ -29,7 +29,7 @@ def probmatrix(n, p):   #meathod for calculating the initial matrix
 
     np.random.shuffle(arr)
     return arr
-n =5
+n = 40
 
 
 def changesourcedest(arr , n): #this meathod is to fix the source and the destination block problem. I am basically changing the
@@ -127,46 +127,56 @@ if(value !=None):
     arr[n-1][n-1].setFill("red")
 
 #print("count: " + str(count))
-
+hardermaze = 0
 stop = 0
 keepmax =  max
+count = 0
+stop1 =0
 tempkeep = []
-while(stop != 1):
+while(stop < 50 and stop1 < 100):
     a = random.randrange(1,n-1,1)
     b = random.randrange(0,n-1,1)
     if(val[a][b] == 0):
             val[a][b] = 1
     if(val[a][b] == 1 and ((a != 0 and b != 0) or (a!=n and b!=n))):
             val[a][b] = 0
-
-    w , arr = buildmaze(n)
-    w.setBackground('black')
-    arr = np.array(arr)
-    arr = arr.reshape((n,n))
-    print( arr.shape)
-    for i in range(0,n):
-        for j in range( 0 , n):
-            #print(arr[i][j])
-                if( val[i][j] == 0):
-                    arr[i][j].setFill("black")
-                    arr[i][j].draw(w)
-                else:
-                    arr[i][j].draw(w)
     value , max = hardestmaze.bfs(val,n)
-    if( value == None):
-        print( "no path to be found: " + str(count))
-    else:
-        while(value.prvnode != None):
-            print(str(value.prvnode.nodex) + " " + str(value.prvnode.nodey) )
-            tempkeep.append((value.prvnode.nodex,value.prvnode.nodey))
-            arr[value.prvnode.nodex][value.prvnode.nodey].setFill("red")
-            value = value.prvnode
-    if(value !=None):
-            arr[n-1][n-1].setFill("red")
+    newmax = max
+    if(value != None):
+        stop = stop +1
+        if (keepmax > newmax):
+            count = count + 1
+            print("count: " + str(count))
+        else:
 
-    count = count + 1
-    if(value == None):
-        stop = stop + 1
+            keepmax = newmax
+            hardermaze = hardermaze + 1
+            print("harder map found" + str(hardermaze))
+            w , arr = buildmaze(n)
+            w.setBackground('black')
+            arr = np.array(arr)
+            arr = arr.reshape((n,n))
+            print( arr.shape)
+            for i in range(0,n):
+                for j in range( 0 , n):
+                    #print(arr[i][j])
+                        if( val[i][j] == 0):
+                            arr[i][j].setFill("black")
+                            arr[i][j].draw(w)
+                        else:
+                            arr[i][j].draw(w)
+            while(value.prvnode != None):
+                print(str(value.prvnode.nodex) + " " + str(value.prvnode.nodey) )
+                tempkeep.append((value.prvnode.nodex,value.prvnode.nodey))
+                arr[value.prvnode.nodex][value.prvnode.nodey].setFill("red")
+                value = value.prvnode
+            if(value !=None):
+                    arr[n-1][n-1].setFill("red")
+    else:
+        stop1 = stop1+1
+        print("no path found: " + str(stop1))
+
+print("number of times maze changed: " + str(hardermaze))
 
 #valt = [[1,0,0,1],[1, 1 ,1,1],[1, 1, 1, 0],[1,1,0,1]]
 #print(valt)
@@ -182,6 +192,6 @@ else:
 if(value !=None):
     arr[n-1][n-1].setFill("red")
 """""
-print(value)
+#(value)
 w.getMouse()
 w.close()
