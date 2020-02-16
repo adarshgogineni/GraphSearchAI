@@ -17,15 +17,16 @@ def probmatrix(n, p):   #meathod for calculating the initial matrix
     one = int(math.ceil(total * one))
     arr = []
     #print(z)
-    for i in range(0,z-1): #So i made it z-1 so there will be one free block
+    for i in range(0,z-2): #So i made it z-1 so there will be one free block
         arr.append(0)
     arr.append(2) #then I appended a value 2 so when it randomly shuffles, one of the blocks will be on fire
+    arr.append(2)
     for i in range(0,one):
         arr.append(1)
 
     np.random.shuffle(arr)
     return arr
-n = 8
+n = 15
 
 def changesourcedest(arr , n): #this meathod is to fix the source and the destination block problem. I am basically changing the
     if(val[0][0] == 0): #the values of the source and the destination if they are blocked. I am keeping the probability same by swiching some other value to 0.
@@ -97,7 +98,7 @@ for i in range(0,n): #initial drawing based on val maze
 
 k = 0
 random_q_vals = np.random.rand(n,n) #makes another matrix of (nxn) of random q values
-
+print(random_q_vals)
 def testfn(val,x,y,k): #function to count the number of neighbors that are on fire
     if(x > 0 and val[x-1][y] == 2):
         k += 1
@@ -108,7 +109,7 @@ def testfn(val,x,y,k): #function to count the number of neighbors that are on fi
     if(y < n-1 and val[x][y+1] == 2):
         k += 1
     formula = 1 - (1-random_q_vals[x][y])**k #use the formula with q values
-    if (formula >= 0.5):
+    if (formula >= 0.4):
         return True
     else:
         return False
