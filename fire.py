@@ -2,6 +2,12 @@ from graphics import *
 import numpy as np
 import math
 
+def coloring(arr,maze,n):
+    for i in range (0,n):
+        for j in range(0,n):
+            if maze[i][j] == 2:
+                arr[i][j].setFill("red")
+
 def probmatrix(n, p):   #meathod for calculating the initial matrix
     one = 1-p
     z = p
@@ -47,7 +53,6 @@ def changesourcedest(arr , n): #this meathod is to fix the source and the destin
     return arr
 
 val = np.array(probmatrix(n,0.4)).reshape((n,n))
-print(val[3][3])
 print(val)
 if( val[0][0] == 0 or val[n-1][n-1] == 0):
     val = changesourcedest(val, n)
@@ -74,14 +79,50 @@ w.setBackground('black')
 arr = np.array(arr)
 arr = arr.reshape((n,n))
 print( arr.shape)
+
 for i in range(0,n):
     for j in range(0 , n):
         #print(arr[i][j])
         if( val[i][j] == 0):
             arr[i][j].setFill("black")
             arr[i][j].draw(w)
-        elif( val[i][j] == 2):
+        elif(val[i][j] == 2):
             arr[i][j].setFill("red")
             arr[i][j].draw(w)
         else:
             arr[i][j].draw(w)
+
+
+k = 0
+random_q_vals = np.random.rand(n,n)
+
+def testfn(val,x,y,k):
+    if(x > 0 and val[x-1][y] == 2):
+        k += 1
+    if(x < n-1 and val[x+1][y] == 2):
+        k += 1
+    if(y > 0 and val[x][y-1] == 2 ):
+        k += 1
+    if(y < n-1 and val[x][y+1] == 2):
+        k += 1
+    formula = 1 - (1-random_q_vals[x][y])**k
+    if (formula >= 0.3):
+        return True
+    else:
+        return False
+for i in range(0,20):
+    newMaze = val
+    for i in range(0,n):
+        for j in range(0,n):
+            T = testfn(val,i,j,k)
+            if(T == True and val[i][j] != 0):
+                newMaze[i][j] = 2
+            else:
+                newMaze[i][j] = val[i][j]
+    coloring(arr,newMaze,n)
+    val = newMaze
+    w.getMouse()
+
+
+w.getMouse()
+w.close()
