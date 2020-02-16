@@ -114,6 +114,6 @@ def bfs(arr,n):
     #print(str(temp.nodex) + " " +str(temp.nodey))
 
     if( temp.nodex ==n-1 and temp.nodey == n-1  ):
-        return temp
+        return temp, visited
     print(q.empty())
-    return None
+    return None , visited

@@ -1,6 +1,7 @@
 import bfs
 import math
 import queue
+import random
 def EDhuristic(node, n): #this is the Euclidean Distance
     x = node.nodex
     y = node.nodey
@@ -61,7 +62,7 @@ def checkin(qu, tmpr):
             return True
     return False
 
-def astarED(arr , n):
+def astarED(arr , n, algo):
     start = bfs.node(0,0,None)
     nbr = getneighbor(arr, start , n)
     minnode =start
@@ -71,8 +72,10 @@ def astarED(arr , n):
         #print( str(minnode.nodex) + " " + str(minnode.nodey))
         minher = -1
         for q in nbr.queue:
-            tmphr = EDhuristic2(q, n) #Change needed for distances
-
+            if(algo == 0):
+                tmphr = EDhuristic(q, n) #Change needed for distances
+            if(algo == 1):
+                tmphr = EDhuristic2(q, n)
             if ( minher == -1):
                 if(bfs.vt(visited,q.nodex, q.nodey) == False):
                     minher = tmphr
@@ -80,18 +83,27 @@ def astarED(arr , n):
             elif( tmphr < minher):
                 if(bfs.vt(visited,q.nodex, q.nodey) == False):
                     #print(minher)
+                    qu.append((minnode,minher))
                     minher = tmphr
                     minnode = q
-                    qu.append((q,tmphr))
-            else:
+                    #qu.append((q,tmphr))
+            elif( tmphr == minher):
+                randnumb = random.randint(0,1)
                 if(bfs.vt(visited,q.nodex, q.nodey) == False):
+                    if(randnumb == 1 ):
+                        qu.append((minnode,minher))
+                        minher= tmphr
+                        minnode = q
+
+
+            elif(bfs.vt(visited,q.nodex, q.nodey) == False and minnode != q):
                     if(checkin(qu, q)== False):
                         qu.append((q,tmphr))
-                        print(str(q.nodex) + " " +str(q.nodey)+ "->")
+                        #print(str(q.nodex) + " " +str(q.nodey)+ "->")
 
         if(minher == -1):
             if(len(qu) == 0):
-                return None
+                return None , visited
             else:
                 rnode = 0
                 sm= n*n
@@ -100,25 +112,25 @@ def astarED(arr , n):
 
                     #print(t)
                     if(t[1] < sm):
-                        if(bfs.vt(visited,t[0].nodex, t[0].nodey) == False ):
-                            minnode = t[0]
-                            sm = t[1]
-                            rnode = t
+                        minnode = t[0]
+                        sm = t[1]
+                        rnode = t
                 if(rnode != 0):
                     qu.remove(rnode)
 
-        print( str(minnode.nodex) + " " + str(minnode.nodey))
+        #print( str(minnode.nodex) + " " + str(minnode.nodey))
         #print(str(minnode.nodex) + " " + str(minnode.nodey))
-        print("nbr")
+        #print("nbr")
         #print(qu)
         if( bfs.vt(visited,minnode.nodex, minnode.nodey) == False):
             visited.put(minnode)
         else:
-            return None
+            if(len(qu) == 0):
+                return None , visited
         nbr = getneighbor(arr, minnode , n)
-        for q_item in nbr.queue:
-            print (str(q_item.nodex) + " " + str( q_item.nodey))
-        print("next")
-    if( minnode == start):
-        return None
-    return minnode
+        #for q_item in nbr.queue:
+            #print (str(q_item.nodex) + " " + str( q_item.nodey))
+        #print("next")
+    if( minnode == start and len(qu) == 0):
+        return None, visited
+    return minnode , visited

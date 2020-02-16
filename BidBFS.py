@@ -108,7 +108,7 @@ def bidbfs(arr,n):
         temp = q.get()
         temp1 = q1.get()
         if( temp.nodex == temp1.nodex and temp.nodey == temp1.nodey):
-            return temp , temp1
+            return temp , temp1 ,visited.qsize() + visited1.qsize()
         """
         for q_0 in q.queue:
             for q_1 in q1.queue:
@@ -121,16 +121,16 @@ def bidbfs(arr,n):
         """
         for q_0 in q.queue:
             if(q_0.nodex == temp1.nodex and q_0.nodey == temp1.nodey):
-                return q_0, temp1
+                return q_0, temp1,visited.qsize() + visited1.qsize()
         for v_0 in visited.queue:
             if(v_0.nodex == temp1.nodex and v_0.nodey == temp1.nodey):
-                return v_0, temp1
+                return v_0, temp1,visited.qsize() + visited1.qsize()
         for q_1 in q1.queue:
             if(q_1.nodex == temp.nodex and q_1.nodey == temp.nodey):
-                return temp, q_1
+                return temp, q_1,visited.qsize() + visited1.qsize()
         for v_1 in visited1.queue:
             if(v_1.nodex == temp.nodex and v_1.nodey == temp.nodey):
-                return temp,v_1
+                return temp,v_1,visited.qsize() + visited1.qsize()
         #print(str(temp.nodex) + " " + str( temp.nodey))
         #print("next")
         if(temp1 != None):
@@ -148,4 +148,4 @@ def bidbfs(arr,n):
         return temp
     """
     print(q.empty())
-    return 0 , 0
+    return 0 , 0 , visited.qsize() + visited1.qsize()

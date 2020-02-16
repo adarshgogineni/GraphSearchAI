@@ -4,6 +4,9 @@ import math
 import bfs
 import BidBFS
 import Astar
+import dfs
+import csv
+import random
 """
 win = GraphWin("My maze", 500, 500)
 shape = Rectangle(Point(80,0), Point(120,40) )
@@ -27,117 +30,222 @@ def probmatrix(n, p):   #meathod for calculating the initial matrix
         arr.append(0)
     for i in range(0,one):
         arr.append(1)
-
+    if( len(arr) > n*n):
+        arr.remove(0)
     np.random.shuffle(arr)
-    return arr
-n =40
+    return arr , one
 
 
-def changesourcedest(arr , n): #this meathod is to fix the source and the destination block problem. I am basically changing the
+
+def changesourcedest(val , n , one): #this meathod is to fix the source and the destination block problem. I am basically changing the
     if(val[0][0] == 0): #the values of the source and the destination if they are blocked. I am keeping the probability same by swiching some other value to 0.
+        x = random.randint(1,one)
+        nth = 0
         for i in range(0,n):
             a = 0
             for j in range(1,n):
-                if(val[i][j] == 1 and (i!=n-1 or j != n-1) ):
+                if(val[i][j] == 1 and (i!=n-1 or j != n-1) and x == nth ):
                     val[i][j] =0; #if the values encountered is one then switch it to zero to keep the probability same.
                     val[0][0]= 1;  # switch the source to one.
                     a = 1
                     break;
+                elif(val[i][j] == 1):
+                    nth = nth+1
             if(a == 1):
                 break;
     if(val[n-1][n-1] == 0):  #this is for the destination value. you are doing the same thing again.
+        x = random.randint(1,one-1)
+        nth = 0
         for i in range(0,n):
             a = 0
             for j in range(1,n):
-                if(val[i][j] == 1):
+                if(val[i][j] == 1 and x == nth):
                     val[i][j] =0;
                     val[n-1][n-1]= 1;
                     a = 1
                     break;
+                elif(val[i][j] == 1):
+                    nth = nth+1
             if(a == 1):
                 break;
-    return arr
-h = 10
-val = np.array(probmatrix(n,0.2)).reshape((n,n))
-print(val[3][3])
+    return val
+def maze(n, prob):
+    val = []
+    h = 10
+    mat, one = probmatrix(n,prob)
+    val = np.array(mat).reshape((n,n))
+    #print(val[3][3])
+    #print(str(val[0][0]) + " " + str(val[1][1]))
+    #if( val[0][0] == 0 or val[n-1][n-1] == 0):
+    val = changesourcedest(val, n, one)
+    def buildmaze(n):
+        win = GraphWin("My maze" , n*h ,n*h)
+        arr = []
+        l = 0
+        k = h
+        for i in range(0,n):
+            for j in range(0,n):
+                shape = Rectangle(Point(l, i*h), Point(k,h*(i+1)))
+                #print(l)
+                shape.setOutline("blue")
+                shape.setFill("white")
+                arr.append(shape)
+                l = l+h
+                k = k+h
+            l=0
+            k =h
+        return win, arr
 
-if( val[0][0] == 0 or val[n-1][n-1] == 0):
-    val = changesourcedest(val, n)
-def buildmaze(n):
-    win = GraphWin("My maze" , n*h ,n*h)
-    arr = []
-    l = 0
-    k = h
+    w , arr = buildmaze(n)
+    w.setBackground('black')
+    arr = np.array(arr)
+    arr = arr.reshape((n,n))
+    #print( arr.shape)
     for i in range(0,n):
-        for j in range(0,n):
-            shape = Rectangle(Point(l, i*h), Point(k,h*(i+1)))
-            #print(l)
-            shape.setOutline("blue")
-            shape.setFill("white")
-            arr.append(shape)
-            l = l+h
-            k = k+h
-        l=0
-        k =h
-    return win, arr
-
-w , arr = buildmaze(n)
-w.setBackground('black')
-arr = np.array(arr)
-arr = arr.reshape((n,n))
-print( arr.shape)
-for i in range(0,n):
-    for j in range( 0 , n):
-        #print(arr[i][j])
-        if( val[i][j] == 0):
-            arr[i][j].setFill("black")
-            arr[i][j].draw(w)
-        else:
-            arr[i][j].draw(w)
-#m = np.array((10,10))
-print(val)
+        for j in range( 0 , n):
+            #print(arr[i][j])
+            if( val[i][j] == 0):
+                arr[i][j].setFill("black")
+                arr[i][j].draw(w)
+            else:
+                arr[i][j].draw(w)
+    #m = np.array((10,10))
+    #print(val)
+    return w, val, arr
 #print(valt)
-#value = bfs.bfs(val,n)
-""" #this is for bidirectional BFS
-value1, value2 = BidBFS.bidbfs(val, n)
-print(value1,value2)
-if(value1 != 0 and value2 !=0):
-    while( value1 != None):
-        print(str(value1.nodex) + " " + str(value1.nodey) )
-        arr[value1.nodex][value1.nodey].setFill("red")
-        value1 = value1.prvnode
-    while( value2 != None):
-        print(str(value2.nodex) + " " + str(value2.nodey) )
-        arr[value2.nodex][value2.nodey].setFill("red")
-        value2 = value2.prvnode
-"""
 
-""" #this is for regular bfs
-if( value == None):
-    print( "no path to be found")
-else:
-    while( value.prvnode != None):
-        print(str(value.prvnode.nodex) + " " + str(value.prvnode.nodey) )
-        arr[value.prvnode.nodex][value.prvnode.nodey].setFill("red")
-        value = value.prvnode
-if(value !=None):
-    arr[n-1][n-1].setFill("red")
+ #this is for bidirectional BFS
+def bidbfs(val , n , arr):
+    value1, value2, fringesize = BidBFS.bidbfs(val, n)
+    #print(value1,value2)
+    temp = value1
+    temp1 = 0
+    temp2 = value2
+    if(value1 != 0 and value2 !=0):
+        while( value1 != None):
+            print(str(value1.nodex) + " " + str(value1.nodey) )
+            arr[value1.nodex][value1.nodey].setFill("red")
+            value1 = value1.prvnode
+        while( value2 != None):
+            print(str(value2.nodex) + " " + str(value2.nodey) )
+            arr[value2.nodex][value2.nodey].setFill("red")
+            temp1= value2
+            value2 = value2.prvnode
+        temp1.prvnode = temp
+        if(value1 !=None):
+            arr[n-1][n-1].setFill("red")
+        return temp2 , fringesize
+    return None , fringesize
 
-"""
+ #this is for rew.getMouse()gular bfs
+def runbfs(val, arr):
+    value , visited = bfs.bfs(val,n)
+    if( value == None):
+        print( "no path to be found")
+    else:
+        temp = value
+        while( value.prvnode != None):
+            print(str(value.prvnode.nodex) + " " + str(value.prvnode.nodey) )
+            arr[value.prvnode.nodex][value.prvnode.nodey].setFill("red")
+            value = value.prvnode
+    if(value !=None):
+        arr[n-1][n-1].setFill("red")
+        return temp, visited
+    return None , visited
+
 
 #valt = [[1,0,0,1],[1, 1 ,1,1],[1, 1, 1, 0],[1,1,0,1]]
 #print(valt)
-value = Astar.astarED(val,n)
-if( value == None):
-    print( "no path to be found")
-else:
-    while( value.prvnode != None):
-        #print(str(value.prvnode.nodex) + " " + str(value.prvnode.nodey) )
-        arr[value.prvnode.nodex][value.prvnode.nodey].setFill("red")
-        value = value.prvnode
-if(value !=None):
-    arr[n-1][n-1].setFill("red")
+def astartalgo(algo, val , n , arr):
+    minvisited = n*n
+    minvalues = 0
+    for i in range(0,20):
+        value , visited = Astar.astarED(val,n,algo)
+        if( value == None):
+            print( "no path to be found")
+        else:
+            if( visited.qsize() < minvisited):
+                minvalues = value
+                minvisited = visited.qsize()
+    print(i)
+    temp = minvalues
+    if(minvalues != 0):
+        while( minvalues.prvnode != None):
+            #print(str(value.prvnode.nodex) + " " + str(value.prvnode.nodey) )
+            arr[minvalues.prvnode.nodex][minvalues.prvnode.nodey].setFill("red")
+            minvalues = minvalues.prvnode
 
-print(value)
+        if(minvalues != 0):
+            arr[n-1][n-1].setFill("red")
+    else:
+        return None, minvisited
+    return temp, minvisited
+def reset(arr, value):
+    if(value != None ):
+        while( value.prvnode != None):
+            #print(str(value.prvnode.nodex) + " " + str(value.prvnode.nodey) )
+            arr[value.prvnode.nodex][value.prvnode.nodey].setFill("white")
+            value = value.prvnode
+        arr[n-1][n-1].setFill("white")
+def rundfs(val, n):
+    start = dfs.node(0,0)
+    dfs.dfs(start,val,n)
+    visit = dfs
+
+    visitednodes=0
+    for visited in dfs.visited:
+        arr[visited[0]][visited[1]].setFill("green")
+        visitednodes = visitednodes +1
+    w.getMouse()
+    pathnotfound =dfs.pathnotfound
+    for visited in dfs.visited:
+        arr[visited[0]][visited[1]].setFill("white")
+    return pathnotfound , visitednodes
+"""
+resetvalues = runbfs()
+w.getMouse()
+reset(arr , resetvalues)
+resetvalues = bidbfs()
+w.getMouse()
+reset(arr , resetvalues)
+resetvalues = astartalgo(0)
+w.getMouse()
+reset(arr , resetvalues)
+resetvalues = astartalgo(1)
+
+w.getMouse()
+"""
+
+with open('solve-40dfs.csv', 'wb') as csvfile:#, open('fringe-40bfs.csv', 'wb') as b:
+    for i in range(1,50):
+        i = float(i)
+        prob = i/100
+        #print(prob)
+        n = 50
+        w, val , arr = maze(n, prob)
+
+        resetvalues , visited = rundfs( val , n)
+        #w.getMouse()
+        if(resetvalues != None):
+
+            #reset(arr , resetvalues)
+
+            filewriter = csv.writer(csvfile, delimiter=',',
+                                        quotechar='|', quoting=csv.QUOTE_MINIMAL)
+            filewriter.writerow([str(prob), '1'])
+            #filewriter1 = b.writer(b, delimiter=',',
+                                        #quotechar='|', quoting=csv.QUOTE_MINIMAL)
+            #filewriter1.writerow([str(prob), visited.qsize()])
+        else:
+            print("NP")
+
+            filewriter = csv.writer(csvfile, delimiter=',',
+                                        quotechar='|', quoting=csv.QUOTE_MINIMAL)
+            filewriter.writerow([str(prob), '0'])
+            #filewriter1 = b.writer(b, delimiter=',',
+                                        #quotechar='|', quoting=csv.QUOTE_MINIMAL)
+            #filewriter1.writerow([str(prob), visited.qsize()])
+#print(value)
+#print("outside")
 w.getMouse()
 w.close()
