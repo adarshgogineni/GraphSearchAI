@@ -97,14 +97,20 @@ def bfs(arr,n):
     add(q,start, arr , n , visited)
 
     visited.put(start)
+    max = 0
+    absmax = 0
     #for q_item in q.queue:
         #print (str(q_item.nodex) + " " + str( q_item.nodey))
     while((temp.nodex!=n-1 or temp.nodey != n-1) and q.empty() != True  ):
         temp = q.get()
 
         for q_item in q.queue:
-            print (str(q_item.nodex) + " " + str( q_item.nodey))
+            max = max +1
+            #print (str(q_item.nodex) + " " + str( q_item.nodey))
         #print(str(temp.nodex) + " " + str( temp.nodey))
+        if( max > absmax):
+            absmax = max
+        max = 0
         print("next")
         a = add(q,temp, arr , n, visited)
         visited.put(temp)
@@ -114,6 +120,6 @@ def bfs(arr,n):
     #print(str(temp.nodex) + " " +str(temp.nodey))
 
     if( temp.nodex ==n-1 and temp.nodey == n-1  ):
-        return temp, visited
+        return temp, visited , absmax
     print(q.empty())
-    return None , visited
+    return None , visited , absmax

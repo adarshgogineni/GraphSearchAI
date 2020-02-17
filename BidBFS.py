@@ -90,6 +90,8 @@ def add(q, start , arr , n, visited):
     #print(a)
     return a
 def bidbfs(arr,n):
+    max = 0
+    absmax = 0
     start = node(0,0,None)
     end = node(n-1 , n-1 , None)
     temp = start
@@ -108,7 +110,7 @@ def bidbfs(arr,n):
         temp = q.get()
         temp1 = q1.get()
         if( temp.nodex == temp1.nodex and temp.nodey == temp1.nodey):
-            return temp , temp1 ,visited.qsize() + visited1.qsize()
+            return temp , temp1 ,visited.qsize() + visited1.qsize() , absmax
         """
         for q_0 in q.queue:
             for q_1 in q1.queue:
@@ -120,17 +122,22 @@ def bidbfs(arr,n):
                     return temp , q_1
         """
         for q_0 in q.queue:
+            max = max +1
             if(q_0.nodex == temp1.nodex and q_0.nodey == temp1.nodey):
-                return q_0, temp1,visited.qsize() + visited1.qsize()
+                return q_0, temp1,visited.qsize() + visited1.qsize() , absmax
         for v_0 in visited.queue:
             if(v_0.nodex == temp1.nodex and v_0.nodey == temp1.nodey):
-                return v_0, temp1,visited.qsize() + visited1.qsize()
+                return v_0, temp1,visited.qsize() + visited1.qsize() , absmax
         for q_1 in q1.queue:
+            max = max +1
             if(q_1.nodex == temp.nodex and q_1.nodey == temp.nodey):
-                return temp, q_1,visited.qsize() + visited1.qsize()
+                return temp, q_1,visited.qsize() + visited1.qsize() , absmax
         for v_1 in visited1.queue:
             if(v_1.nodex == temp.nodex and v_1.nodey == temp.nodey):
-                return temp,v_1,visited.qsize() + visited1.qsize()
+                return temp,v_1,visited.qsize() + visited1.qsize() , absmax
+        if( max > absmax):
+            absmax = max
+        max = 0
         #print(str(temp.nodex) + " " + str( temp.nodey))
         #print("next")
         if(temp1 != None):
@@ -148,4 +155,4 @@ def bidbfs(arr,n):
         return temp
     """
     print(q.empty())
-    return 0 , 0 , visited.qsize() + visited1.qsize()
+    return 0 , 0 , visited.qsize() + visited1.qsize() , absmax

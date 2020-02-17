@@ -68,8 +68,13 @@ def astarED(arr , n, algo):
     minnode =start
     visited = queue.Queue(maxsize=n*n)
     qu = []
+    max = 0
+    absmax =0
     while(nbr.empty() != True and (minnode.nodex != n-1 or minnode.nodey !=n-1) ):
         #print( str(minnode.nodex) + " " + str(minnode.nodey))
+        max = len(qu)
+        if( max > absmax):
+            absmax = max
         minher = -1
         for q in nbr.queue:
             if(algo == 0):
@@ -103,7 +108,7 @@ def astarED(arr , n, algo):
 
         if(minher == -1):
             if(len(qu) == 0):
-                return None , visited
+                return None , visited , absmax
             else:
                 rnode = 0
                 sm= n*n
@@ -126,11 +131,11 @@ def astarED(arr , n, algo):
             visited.put(minnode)
         else:
             if(len(qu) == 0):
-                return None , visited
+                return None , visited , absmax
         nbr = getneighbor(arr, minnode , n)
         #for q_item in nbr.queue:
             #print (str(q_item.nodex) + " " + str( q_item.nodey))
         #print("next")
     if( minnode == start and len(qu) == 0):
-        return None, visited
-    return minnode , visited
+        return None, visited , absmax
+    return minnode , visited, absmax

@@ -116,8 +116,9 @@ def maze(n, prob):
 
  #this is for bidirectional BFS
 def bidbfs(val , n , arr):
-    value1, value2, fringesize = BidBFS.bidbfs(val, n)
+    value1, value2, fringesize, absmax = BidBFS.bidbfs(val, n)
     #print(value1,value2)
+    length = 0
     temp = value1
     temp1 = 0
     temp2 = value2
@@ -126,20 +127,24 @@ def bidbfs(val , n , arr):
             print(str(value1.nodex) + " " + str(value1.nodey) )
             arr[value1.nodex][value1.nodey].setFill("red")
             value1 = value1.prvnode
+            length = length +1
         while( value2 != None):
             print(str(value2.nodex) + " " + str(value2.nodey) )
             arr[value2.nodex][value2.nodey].setFill("red")
             temp1= value2
             value2 = value2.prvnode
+            length = length +1
         temp1.prvnode = temp
         if(value1 !=None):
             arr[n-1][n-1].setFill("red")
-        return temp2 , fringesize
-    return None , fringesize
+            length = length +1
+        return temp2 , fringesize , length , absmax
+    return None , fringesize , length , absmax
 
  #this is for rew.getMouse()gular bfs
-def runbfs(val, arr):
-    value , visited = bfs.bfs(val,n)
+def runbfs(val, arr, n):
+    length =0
+    value , visited, absmax = bfs.bfs(val,n)
     if( value == None):
         print( "no path to be found")
     else:
@@ -148,10 +153,12 @@ def runbfs(val, arr):
             print(str(value.prvnode.nodex) + " " + str(value.prvnode.nodey) )
             arr[value.prvnode.nodex][value.prvnode.nodey].setFill("red")
             value = value.prvnode
+            length = length+1
     if(value !=None):
         arr[n-1][n-1].setFill("red")
-        return temp, visited
-    return None , visited
+        length = length +1
+        return temp, visited , length , absmax
+    return None , visited , length , absmax
 
 
 #valt = [[1,0,0,1],[1, 1 ,1,1],[1, 1, 1, 0],[1,1,0,1]]
@@ -159,27 +166,33 @@ def runbfs(val, arr):
 def astartalgo(algo, val , n , arr):
     minvisited = n*n
     minvalues = 0
+    length=0
+    max =0
+    absmax =0
     for i in range(0,20):
-        value , visited = Astar.astarED(val,n,algo)
+        value , visited , max = Astar.astarED(val,n,algo)
         if( value == None):
             print( "no path to be found")
         else:
             if( visited.qsize() < minvisited):
+                absmax= max
                 minvalues = value
                 minvisited = visited.qsize()
     print(i)
     temp = minvalues
     if(minvalues != 0):
         while( minvalues.prvnode != None):
+            length =length+1
             #print(str(value.prvnode.nodex) + " " + str(value.prvnode.nodey) )
             arr[minvalues.prvnode.nodex][minvalues.prvnode.nodey].setFill("red")
             minvalues = minvalues.prvnode
 
         if(minvalues != 0):
             arr[n-1][n-1].setFill("red")
+            length = length +1
     else:
-        return None, minvisited
-    return temp, minvisited
+        return None, minvisited, length, absmax
+    return temp, minvisited, length, absmax
 def reset(arr, value):
     if(value != None ):
         while( value.prvnode != None):
@@ -189,18 +202,11 @@ def reset(arr, value):
         arr[n-1][n-1].setFill("white")
 def rundfs(val, n):
     start = dfs.node(0,0)
+    #dfs.dfs(start, val,n)
     dfs.dfs(start,val,n)
-    visit = dfs
-
-    visitednodes=0
     for visited in dfs.visited:
         arr[visited[0]][visited[1]].setFill("green")
-        visitednodes = visitednodes +1
-    w.getMouse()
-    pathnotfound =dfs.pathnotfound
-    for visited in dfs.visited:
-        arr[visited[0]][visited[1]].setFill("white")
-    return pathnotfound , visitednodes
+    #return dfs.visitedlength
 """
 resetvalues = runbfs()
 w.getMouse()
@@ -216,32 +222,38 @@ resetvalues = astartalgo(1)
 w.getMouse()
 """
 
-with open('solve-40dfs.csv', 'wb') as csvfile:#, open('fringe-40bfs.csv', 'wb') as b:
+with open('maxfringe-40astar1.csv', 'wb') as csvfile:#, open('fringe-40bfs.csv', 'wb') as b:
     for i in range(1,50):
         i = float(i)
         prob = i/100
         #print(prob)
         n = 50
         w, val , arr = maze(n, prob)
+        #rundfs(val, n)
+        a, b ,c , absmax = astartalgo(1, val , n , arr)
+        #dfs.visited = []
+        #dfs.stack = []
 
-        resetvalues , visited = rundfs( val , n)
         #w.getMouse()
-        if(resetvalues != None):
+        #v = 0
+        #for q_item in visited.queue:
+        #    v = v +1
+        #if(resetvalues != None):
 
             #reset(arr , resetvalues)
 
-            filewriter = csv.writer(csvfile, delimiter=',',
-                                        quotechar='|', quoting=csv.QUOTE_MINIMAL)
-            filewriter.writerow([str(prob), '1'])
+        filewriter = csv.writer(csvfile, delimiter=',',quotechar='|', quoting=csv.QUOTE_MINIMAL)
+        filewriter.writerow([str(prob), absmax])
+        #dfs.lengthvisited= []
             #filewriter1 = b.writer(b, delimiter=',',
                                         #quotechar='|', quoting=csv.QUOTE_MINIMAL)
             #filewriter1.writerow([str(prob), visited.qsize()])
-        else:
-            print("NP")
+        #else:
+            #print("NP")
 
-            filewriter = csv.writer(csvfile, delimiter=',',
-                                        quotechar='|', quoting=csv.QUOTE_MINIMAL)
-            filewriter.writerow([str(prob), '0'])
+            #filewriter = csv.writer(csvfile, delimiter=',',
+                                        #quotechar='|', quoting=csv.QUOTE_MINIMAL)
+            #filewriter.writerow([str(prob), v])
             #filewriter1 = b.writer(b, delimiter=',',
                                         #quotechar='|', quoting=csv.QUOTE_MINIMAL)
             #filewriter1.writerow([str(prob), visited.qsize()])
