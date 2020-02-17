@@ -137,7 +137,8 @@ tempx = 0
 tempy = 0
 oldcount = 0
 nomaxchange = 0
-while(stop < 10 and stop1 < 10):
+while(stop < 50 and stop1 < 10):
+    print("stop: " + str(stop))
     print("keepmax: " + str(keepmax))
     print("count: " + str(count))
     print("max: " + str(max))
@@ -171,6 +172,8 @@ while(stop < 10 and stop1 < 10):
         value = tempkeep
     if(value != None):
         stop = stop + 1
+        if(newmax == None):
+            newmax = keepmax
         if (keepmax > newmax):
             nomaxchange = nomaxchange + 1
             print("Maps with no max changed: " + str(nomaxchange))
@@ -192,7 +195,7 @@ while(stop < 10 and stop1 < 10):
                         else:
                             arr[i][j].draw(w)
             count = 0
-            tempkeep = value
+            #tempkeep = value
             while(value.prvnode != None):
                 #print(str(value.prvnode.nodex) + " " + str(value.prvnode.nodey) )
                 #tempkeep.append((value.prvnode.nodex,value.prvnode.nodey))

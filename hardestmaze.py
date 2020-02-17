@@ -50,7 +50,7 @@ def add(q, start , arr , n, visited):
     if(start.prvnode != None):
         prvx = start.prvnode.nodex
         prvy = start.prvnode.nodey
-    print( str(prvx) + " " + str(prvy) + " "+ str(x) + " " + str(y))
+    #print( str(prvx) + " " + str(prvy) + " "+ str(x) + " " + str(y))
     xtmp = 0
     ytmp = 0
     a = 0
@@ -67,7 +67,7 @@ def add(q, start , arr , n, visited):
         xtmp, ytmp = down(x,y,n)
 
         if( (xtmp != prvx or ytmp != prvy) and arr[xtmp][ytmp] != 0 and inque(q, xtmp , ytmp) == False and vt(visited , xtmp , ytmp) == False):
-            print(str(xtmp) + " " + str(ytmp))
+            #print(str(xtmp) + " " + str(ytmp))
             temp = node(xtmp,ytmp,start)
             if( temp != None):
                 q.put(temp)
@@ -121,6 +121,6 @@ def bfs(arr,n):
 
     if( temp.nodex ==n-1 and temp.nodey == n-1  ):
         return temp , absmax
-    print(q.empty())
+    #print(q.empty())
 
     return None , None
