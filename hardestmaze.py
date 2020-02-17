@@ -106,16 +106,16 @@ def bfs(arr,n):
         temp = q.get()
 
         for q_item in q.queue:
-            print (str(q_item.nodex) + " " + str( q_item.nodey))
+            #print (str(q_item.nodex) + " " + str( q_item.nodey))
             max = max +1
         #print(str(temp.nodex) + " " + str( temp.nodey))
-        print("next")
+        #print("next")
         a = add(q,temp, arr , n, visited)
         visited.put(temp)
         if( max > absmax):
             absmax = max
-        print(a)
-
+        #print(a)
+        max=0
 
     #print(str(temp.nodex) + " " +str(temp.nodey))
 

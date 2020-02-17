@@ -29,7 +29,7 @@ def probmatrix(n, p):   #meathod for calculating the initial matrix
 
     np.random.shuffle(arr)
     return arr
-n = 40
+n = 20
 
 
 def changesourcedest(arr , n): #this meathod is to fix the source and the destination block problem. I am basically changing the
@@ -95,7 +95,7 @@ for i in range(0,n):
         else:
             arr[i][j].draw(w)
 #m = np.array((10,10))
-print(val)
+#print(val)
 #print(valt)
 
 
@@ -116,13 +116,15 @@ if(value1 != 0 and value2 !=0):
 """
 
 count = 1
+tempkeep = value
 if( value == None):
     print( "no path to be found")
 else:
     while( value.prvnode != None):
-        print(str(value.prvnode.nodex) + " " + str(value.prvnode.nodey) )
+        #print(str(value.prvnode.nodex) + " " + str(value.prvnode.nodey) )
         arr[value.prvnode.nodex][value.prvnode.nodey].setFill("red")
         value = value.prvnode
+        count = count + 1
 if(value !=None):
     arr[n-1][n-1].setFill("red")
 
@@ -130,33 +132,57 @@ if(value !=None):
 hardermaze = 0
 stop = 0
 keepmax =  max
-count = 0
 stop1 =0
-tempkeep = []
-while(stop < 50 and stop1 < 100):
-    a = random.randrange(1,n-1,1)
-    b = random.randrange(0,n-1,1)
-    if(val[a][b] == 0):
-            val[a][b] = 1
-    if(val[a][b] == 1 and ((a != 0 and b != 0) or (a!=n and b!=n))):
-            val[a][b] = 0
+tempx = 0
+tempy = 0
+oldcount = 0
+nomaxchange = 0
+while(stop < 10 and stop1 < 10):
+    print("keepmax: " + str(keepmax))
+    print("count: " + str(count))
+    print("max: " + str(max))
+    if(count <= 1):
+        count = oldcount
+    else:
+        oldcount = count
+    choice = random.choice([1,2])
+    if(choice == 1):
+        print("path 1 taken")
+        a = random.randrange(1,n-1,1)
+        b = random.randrange(0,n-1,1)
+        if(val[a][b] == 0):
+                val[a][b] = 1
+        if(val[a][b] == 1 and ((a != 0 and b != 0) or (a!=n and b!=n))):
+                val[a][b] = 0
+    if(choice == 2):
+        print("path 2 taken")
+        a = random.randrange(1,count-1,1)
+        hold = tempkeep
+        while(a>0):
+            tempkeep = tempkeep.prvnode
+            a = a - 1
+        tempx = tempkeep.nodex
+        tempy = tempkeep.nodey
+        val[tempx][tempy] = 0
+        tempkeep = hold
     value , max = hardestmaze.bfs(val,n)
     newmax = max
+    if(value == None):
+        value = tempkeep
     if(value != None):
-        stop = stop +1
+        stop = stop + 1
         if (keepmax > newmax):
-            count = count + 1
-            print("count: " + str(count))
+            nomaxchange = nomaxchange + 1
+            print("Maps with no max changed: " + str(nomaxchange))
         else:
-
             keepmax = newmax
             hardermaze = hardermaze + 1
-            print("harder map found" + str(hardermaze))
+            print("harder map found " + str(hardermaze))
             w , arr = buildmaze(n)
             w.setBackground('black')
             arr = np.array(arr)
             arr = arr.reshape((n,n))
-            print( arr.shape)
+            #print( arr.shape)
             for i in range(0,n):
                 for j in range( 0 , n):
                     #print(arr[i][j])
@@ -165,16 +191,21 @@ while(stop < 50 and stop1 < 100):
                             arr[i][j].draw(w)
                         else:
                             arr[i][j].draw(w)
+            count = 0
+            tempkeep = value
             while(value.prvnode != None):
-                print(str(value.prvnode.nodex) + " " + str(value.prvnode.nodey) )
-                tempkeep.append((value.prvnode.nodex,value.prvnode.nodey))
+                #print(str(value.prvnode.nodex) + " " + str(value.prvnode.nodey) )
+                #tempkeep.append((value.prvnode.nodex,value.prvnode.nodey))
                 arr[value.prvnode.nodex][value.prvnode.nodey].setFill("red")
                 value = value.prvnode
+                count = count + 1
             if(value !=None):
                     arr[n-1][n-1].setFill("red")
     else:
         stop1 = stop1+1
         print("no path found: " + str(stop1))
+        count = oldcount
+        value = tempkeep
 
 print("number of times maze changed: " + str(hardermaze))
 
