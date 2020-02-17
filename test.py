@@ -151,14 +151,14 @@ def runbfs(val, arr, n):
         temp = value
         while( value.prvnode != None):
             print(str(value.prvnode.nodex) + " " + str(value.prvnode.nodey) )
-            arr[value.prvnode.nodex][value.prvnode.nodey].setFill("red")
+            arr[value.prvnode.nodex][value.prvnode.nodey].setFill("yellow")
             value = value.prvnode
             length = length+1
     if(value !=None):
-        arr[n-1][n-1].setFill("red")
+        arr[n-1][n-1].setFill("yellow")
         length = length +1
-        return temp, visited , length , absmax
-    return None , visited , length , absmax
+        return temp, visited
+    return None , visited
 
 
 #valt = [[1,0,0,1],[1, 1 ,1,1],[1, 1, 1, 0],[1,1,0,1]]
@@ -221,7 +221,7 @@ resetvalues = astartalgo(1)
 
 w.getMouse()
 """
-
+"""
 with open('maxfringe-40astar1.csv', 'wb') as csvfile:#, open('fringe-40bfs.csv', 'wb') as b:
     for i in range(1,50):
         i = float(i)
@@ -259,5 +259,6 @@ with open('maxfringe-40astar1.csv', 'wb') as csvfile:#, open('fringe-40bfs.csv',
             #filewriter1.writerow([str(prob), visited.qsize()])
 #print(value)
 #print("outside")
-w.getMouse()
-w.close()
+"""
+#w.getMouse()
+#w.close()
