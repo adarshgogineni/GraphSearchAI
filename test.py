@@ -207,20 +207,25 @@ def rundfs(val, n):
     for visited in dfs.visited:
         arr[visited[0]][visited[1]].setFill("green")
     #return dfs.visitedlength
-"""
-resetvalues = runbfs()
+n = 10
+prob = 0.2
+w, val , arr = maze(n, prob)
+resetvalues, visited = runbfs(val, arr, n)
 w.getMouse()
-reset(arr , resetvalues)
-resetvalues = bidbfs()
+if( resetvalues != None):
+    reset(arr , resetvalues)
+resetvaluest ,fringesize , length , absma = bidbfs(val , n , arr)
 w.getMouse()
-reset(arr , resetvalues)
-resetvalues = astartalgo(0)
+if( resetvalues != None):
+    reset(arr , resetvalues)
+resetvalues, minvisited, length, absmax = astartalgo(0, val , n , arr) #ED
 w.getMouse()
-reset(arr , resetvalues)
-resetvalues = astartalgo(1)
+if( resetvalues != None):
+    reset(arr , resetvalues)
+resetvalues,  minvisited, length, absmax = astartalgo(1,val , n , arr) #MH Distance
 
 w.getMouse()
-"""
+
 """
 with open('maxfringe-40astar1.csv', 'wb') as csvfile:#, open('fringe-40bfs.csv', 'wb') as b:
     for i in range(1,50):
